@@ -1,0 +1,28 @@
+{
+  "name": "taskmanagementapi",
+  "version": "1.0.0",
+  "description": "A Jira-Like backend only task management project, that features CRUD endpoints, role based access, user authentication using jwt.",
+  "homepage": "https://github.com/OrgesSermaxhaj/TaskManagementAPI#readme",
+  "bugs": {
+    "url": "https://github.com/OrgesSermaxhaj/TaskManagementAPI/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OrgesSermaxhaj/TaskManagementAPI.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.6"
+  }
+}
