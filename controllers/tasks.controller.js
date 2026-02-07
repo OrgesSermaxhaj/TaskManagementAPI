@@ -1,6 +1,5 @@
-const Tasks = require("../models/tasks");
+// const Tasks = require("../models/tasks");
 const tasksService = require("../services/task.service");
-// const profileService = require('../services/profile.service');
 // const userService = require("../services/user.service");
 
 
@@ -32,6 +31,70 @@ const getUserTasks = async(req, res) => {
     }
 };
 
+
+const getTaskById = async (req, res) => {
+    
+  try {
+    const taskId = req.params.id;
+    const userId = req.user.id;
+    const role = req.user.role;
+
+    const task = await tasksService.getTaskById(
+      taskId,
+      userId,
+      role);
+
+    return res.status(200).json(task);
+  } catch (err) {
+    return res.status(403).json({ message: err.message });
+  }
+};
+
+const createTask = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const role = req.user.role;
+    const projectId = req.params.projectId;
+
+    const task = await tasksService.createTask(
+      userId,
+      role,
+      projectId,
+      req.body
+    
+    );
+
+    return res.status(201).json(task);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+
+const updateTaskStatus = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const role = req.user.role;
+    const taskId = req.params.id;
+    const status = req.body.status;
+
+    const updated = await tasksService.updateStatus(
+      taskId,
+      userId,
+      role,
+      status
+    );
+
+    return res.status(200).json(updated);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
 module.exports = {
-  getAllTasks, getUserTasks
+  getAllTasks,
+  getUserTasks,
+  createTask,
+  updateTaskStatus,
+  getTaskById
 };
