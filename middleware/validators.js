@@ -30,9 +30,18 @@ const validateTask = [
 
     validateRegistration
 ]
+const validateProject = [
+  body("Name").notEmpty().isString().withMessage("Name is required and must be a string").isLength({ min: 3 }).withMessage("Name must have at least 3 characters."),
+  body("Description").notEmpty().isString().withMessage("Description is required and must be a string").isLength({ min: 10 }).withMessage("Description must be at least 10 characters."),
+
+
+
+  validateRegistration
+];
 
 module.exports = {
     validateRegister,
     validateLogin,
-    validateTask
+    validateTask,
+    validateProject
 };

@@ -1,20 +1,25 @@
 const userService = require('./user.service');
 const Tasks = require("../models/tasks");
+const ProjectMembers = require("../models/projectMembers");
 
 
 
 const getAll = async ()=>{
     const tasks = await Tasks.find().populate('createdBy', 'fullName email role').populate('assignedTo' , 'fullName email role')
-  
     return tasks;
 }
 
 const getUserTasks = async (userId)=>{
    const userTasks =  await Tasks.find({ assignedTo: userId }).populate('createdBy', 'fullName email role').populate('assignedTo', 'fullName email role')
-   
     return userTasks;
 }
 const createTask = async (userId, role, projectId, data) => {
+  if (role !== "admin") {
+    const isMember = await ProjectMembers.findOne({project: projectId,user: userId,});  //veq nprojekte ku osht member mun shton
+     if (!isMember) {
+      throw new Error("You are not a member of this project");
+    }
+  }
   const {assignedTo} = data;
 
   const assignedToRole = role === "admin" && assignedTo ? assignedTo : userId;
