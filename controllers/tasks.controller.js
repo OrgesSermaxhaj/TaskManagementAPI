@@ -18,8 +18,8 @@ const getAllTasks = async (req, res) => {
 
 const getUserTasks = async(req, res) => {
     try{ 
-    const userId = req.user.id;
-        console.log("this is the users id", userId);
+    // const userId = req.user.id;
+    //     console.log("this is the users id", userId);
       const tasks = await tasksService.getUserTasks(userId);
        if (tasks.length === 0) {
       return res.status(200).json({message: "User has no tasks!"});
