@@ -1,5 +1,7 @@
 const Projects = require("../models/projects");
 const ProjectMembers = require("../models/projectMembers");
+const Tasks = require("../models/tasks");
+
 
 const createProject = async (userId, Name, Description) => {
   const project = await Projects.create({
@@ -44,9 +46,24 @@ const getProjectById = async (projectId, userId, role) => {
   return project;
 };
 
+const deleteProject = async (projectId) => {
+  const project = await Projects.findById(projectId);
+  if (!project) {
+    throw new Error("Project not found");
+  }
+  await ProjectMembers.deleteMany({project: projectId});
+  await Tasks.deleteMany({project: projectId});
+  await Projects.findByIdAndDelete(projectId);
+
+  return project;
+};
+
+
 module.exports = {
   createProject,
   getAllProjects,
   getMyProjects,
   getProjectById,
+  deleteProject
+
 };
