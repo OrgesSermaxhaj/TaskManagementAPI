@@ -9,5 +9,7 @@ router.post("/", auth, admin, validateProject, projectController.createProject);
 router.get("/adminAll", auth, admin, projectController.getAllProjectsAdmin);
 router.get("/myProjects", auth, projectController.getMyProjects);
 router.get("/:id", auth, projectController.getProjectById);
+router.delete("/:id", auth, admin, projectController.deleteProject);
+
 
 module.exports = router;

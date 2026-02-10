@@ -13,7 +13,6 @@ const createProject = async (req, res) => {
 };
 
 
-
 const getAllProjectsAdmin = async (req, res) => {
   try {
     const projects = await projectService.getAllProjects();
@@ -53,10 +52,21 @@ const getProjectById = async (req, res) => {
     return res.status(403).json({ message: err.message });
   }
 };
+const deleteProject = async (req, res) => {
+  try {
+    const projectId = req.params.id;
+
+    const deleted = await projectService.deleteProject(projectId);
+    return res.status(200).json({message: "Project has been deleted!"});
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
 
 module.exports = {
   createProject,
   getAllProjectsAdmin,
   getMyProjects,
   getProjectById,
+  deleteProject
 };

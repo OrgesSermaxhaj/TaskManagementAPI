@@ -18,8 +18,7 @@ const getAllTasks = async (req, res) => {
 
 const getUserTasks = async(req, res) => {
     try{ 
-    // const userId = req.user.id;
-    //     console.log("this is the users id", userId);
+       const userId = req.user.id;
       const tasks = await tasksService.getUserTasks(userId);
        if (tasks.length === 0) {
       return res.status(200).json({message: "User has no tasks!"});
@@ -90,11 +89,21 @@ const updateTaskStatus = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 };
+const deleteTask = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+  const deleted = await tasksService.deleteTask(taskId);
+    return res.status(200).json(deleted);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
 
 module.exports = {
   getAllTasks,
   getUserTasks,
   createTask,
   updateTaskStatus,
-  getTaskById
+  getTaskById,
+  deleteTask
 };

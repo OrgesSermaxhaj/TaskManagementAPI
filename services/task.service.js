@@ -1,6 +1,7 @@
-const userService = require('./user.service');
 const Tasks = require("../models/tasks");
 const ProjectMembers = require("../models/projectMembers");
+const Projects = require("../models/projects");
+
 
 
 
@@ -14,8 +15,13 @@ const getUserTasks = async (userId)=>{
     return userTasks;
 }
 const createTask = async (userId, role, projectId, data) => {
+   const doesProjectExist = await Projects.findById(projectId);
+  if (!doesProjectExist) {
+    throw new Error("Project not found");
+  }
   if (role !== "admin") {
-    const isMember = await ProjectMembers.findOne({project: projectId,user: userId,});  //veq nprojekte ku osht member mun shton
+    const isMember = await ProjectMembers.findOne({project: projectId, user: userId,});  //veq nprojekte ku osht member mun shton
+
      if (!isMember) {
       throw new Error("You are not a member of this project");
     }
@@ -23,6 +29,20 @@ const createTask = async (userId, role, projectId, data) => {
   const {assignedTo} = data;
 
   const assignedToRole = role === "admin" && assignedTo ? assignedTo : userId;
+  
+   if (role === "admin" && assignedToRole) {
+    const memberExists = await ProjectMembers.findOne({
+      project: projectId,
+      user: assignedToRole,
+    });
+
+    if (!memberExists) {
+      await ProjectMembers.create({
+        project: projectId,
+        user: assignedToRole,
+      });
+    }
+  }
   const task = new Tasks({
     ...data,
     project: projectId, 
@@ -61,13 +81,21 @@ const getTaskById = async (taskId, userId, role) => {
 
   return task;
 };
+const deleteTask = async (taskId) => {
+  const deleted = await Tasks.findByIdAndDelete(taskId);
+  if (!deleted) {
+    throw new Error("Task not found");
+  }
+  return deleted;
+};
 
 module.exports = {
   getAll,
   getUserTasks,
   createTask,
   updateStatus,
-  getTaskById
+  getTaskById,
+  deleteTask
 };
 
 
