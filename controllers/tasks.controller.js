@@ -89,6 +89,26 @@ const updateTaskStatus = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 };
+
+const updatePriorityStatus = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const role = req.user.role;
+    const taskId = req.params.id;
+    const priority = req.body.priority;
+
+    const updated = await tasksService.updatePriority(
+      taskId,
+      userId,
+      role,
+      priority
+    );
+
+    return res.status(200).json(updated);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
 const deleteTask = async (req, res) => {
   try {
     const taskId = req.params.id;
@@ -105,5 +125,6 @@ module.exports = {
   createTask,
   updateTaskStatus,
   getTaskById,
-  deleteTask
+  deleteTask,
+  updatePriorityStatus
 };
